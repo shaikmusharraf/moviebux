@@ -1,31 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "../styles.css";
 
-export default function MovieCard({movie}) {
+export default function MovieCard({ movie, toggleWatchlist, isWatchlisted }) {
+  const errorHandler = (e) => {
+    e.target.src = "images/default.jpg";
+  };
 
-    const errorHandler = (e) => {
-        e.target.src = "images/default.jpg";
+  const getRatingClass = (rating) => {
+    if (rating >= 8) {
+      return "rating-good";
+    } else if (rating >= 6) {
+      return "rating-ok";
+    } else {
+      return "rating-bad";
     }
-
-    const getRatingClass = (rating) => {
-        if(rating >= 8) {
-            return 'rating-good';
-        }else if(rating >= 6 ) {
-            return 'rating-ok';
-        }else {
-            return 'rating-bad';
-        }
-    }
-
+  };
 
   return (
     <div>
       <div key={movie.id} className="movie-card">
-        <img src={`images/${movie.image}`} alt={movie.title} onError={errorHandler} />
+        <img
+          src={`images/${movie.image}`}
+          alt={movie.title}
+          onError={errorHandler}
+        />
         <div className="movie-card-info">
           <h3 className="movie-card-title">{movie.title}</h3>
-          <h3 className="movie-card-genre">{movie.genre}</h3>
-          <h3 className={`movie-card-rating ${getRatingClass(movie.rating)}`}>{movie.rating}</h3>
+          <div>
+            <span className="movie-card-genre">{movie.genre}</span>
+            <span
+              className={`movie-card-rating ${getRatingClass(movie.rating)}`}
+            >
+              {movie.rating}
+            </span>
+          </div>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={isWatchlisted}
+              onChange={() => {
+                toggleWatchlist(movie.id);
+              }}
+            ></input>
+            <span className="slider">
+              <span className="slider-label">
+                {isWatchlisted ? "In watchlist " : "Add to watchlist"}
+              </span>
+            </span>
+          </label>
         </div>
       </div>
     </div>
